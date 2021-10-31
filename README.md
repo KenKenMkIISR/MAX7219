@@ -1,19 +1,39 @@
-# Raspberry Pi PicoおよびMachiKania type Mによる8x8x8マトリクスLED制御
-8連結されたMAX7219を使ったマトリクスLEDをRaspberry Pi PicoおよびBASICコンパイラ搭載マイコンMachiKania type MのSPI通信で制御しました。  
-拡張子pyはRaspberry Pi Pico用のPythonプログラム、BASはMachiKania type M用のBASICプログラムです。  
-・文字列を横スクロール表示（max7219-string.py / ）  
-・PACMANとモンスターのアニメーション（max7219-pacman.py）  
-・落ちてきた複数のボールが跳ねるアニメーション（max7219-bounce.py）  
-・金魚と水草のアニメーション（max7219-goldenfish.py）  
+# 8連結MAX7219マトリクスLEDのマイコン制御（64x8ドット）
+Amazon等で格安で購入できる4連結のMAX7219搭載マトリクスLEDを2個購入し、マイコンで制御してみました。  
+制御に使ったのはRaspberry Pi PicoおよびBASICコンパイラ搭載マイコンMachiKania type Mです。  
 ![](ledmatrix1.jpg)  
+## 加工
+余分なコネクタは外し、ボード同士を接続します。  
+基板固定のため、アクリル板を細長く切断し、ねじ止めしました。  
+また、LEDを直接見ると眩しいので、白いアクリル板やフィルム等を上から被せられるようにしました。  
+![](ledmatrix3.jpg)  
+![](ledmatrix4.jpg)  
+## 公開プログラム
+拡張子「py」はRaspberry Pi Pico用のPythonプログラム、「BAS」はMachiKania type M用のBASICプログラムです。  
   
-# 接続
+・max7219-string.py / SPILED6.BAS  
+　文字列を横スクロールして表示するプログラム  
+  
+・max7219-pacman.py / SPILED7.BAS  
+　PACMANとモンスターが動くアニメーション  
+  
+・max7219-bounce.py / SPILED8.BAS  
+　縦置きして、複数のボールが落ちてきて跳ねるアニメーション  
+  
+・max7219-goldenfish.py / SPILED9.BAS  
+　水草の揺れる水槽を金魚が泳ぎ回るアニメーション  
+![](ledmatrix5.jpg)  
+![](ledmatrix6.jpg)  
+  
+## 接続方法
+LED用の電源はUSBからではなく、別電源を用意してください。  
+  
 Pico側 --------- LED側  
 MOSI GPIO3 ---- DIN  
 SCK GPIO2 ------ CLK  
 SCS GPIO22 ----- CS  
 GND ------------ GND  
-+5V ------------- VCC (USBでは無理があるので別電源が必要)  
++5V ------------- VCC  
   
 MachiKania type M  
 MOSI G9 -------- DIN  
