@@ -1,6 +1,8 @@
 # 8連結MAX7219マトリクスLEDのマイコン制御（64x8ドット）
 Amazon等で格安で購入できる4連結のMAX7219搭載マトリクスLEDを2個購入し、マイコンで制御してみました。  
 制御に使ったのはRaspberry Pi PicoおよびBASICコンパイラ搭載マイコンMachiKania type Mです。  
+動画はこちらで公開しています。  
+https://youtu.be/BjLq4NHFMVI  
 ![](ledmatrix1.jpg)  
 ## 加工
 余分なコネクタは外し、ボード同士を接続します。  
