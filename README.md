@@ -10,6 +10,7 @@ https://youtu.be/BjLq4NHFMVI
 また、LEDを直接見ると眩しいので、白いアクリル板やフィルム等を上から被せられるようにしました。  
 ![](ledmatrix3.jpg)  
 ![](ledmatrix4.jpg)  
+![](ledmatrix6.jpg)  
 ## 公開プログラム
 拡張子「py」はRaspberry Pi Pico用のPythonプログラム、「BAS」はMachiKania type M用のBASICプログラムです。  
   
@@ -25,7 +26,13 @@ https://youtu.be/BjLq4NHFMVI
 ・max7219-goldenfish.py / SPILED9.BAS  
 　水草の揺れる水槽を金魚が泳ぎ回るアニメーション  
 ![](ledmatrix5.jpg)  
-![](ledmatrix6.jpg)  
+  
+・HEIKE.BAS  
+　縦置きにして横8ドットの中に文章を縦スクロールで表示するプログラム  
+　MachiKania type M専用  
+　濃淡表示対応と縦方向の4倍補間で線の多い漢字も認識可能  
+　サンプルデータ　heike3.bmp, heik34.bmp  
+　（参考）https://twitter.com/KenKenMkIISR/status/1446828611030245383  
   
 ## 接続方法
 LED用の電源はUSBからではなく、別電源を用意してください。  
