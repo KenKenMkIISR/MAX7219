@@ -29,7 +29,11 @@ BMP=[\
     0x54000000,0x54000000,0x4C000000,0x58000000,\
     0x70000000,0x50000000,0x20000000,0x20000000,\
     0x92000000,0x54000000,0x6C000000,0x28000000,\
-    0x70000000,0x50000000,0x20000000,0x20000000
+    0x70000000,0x50000000,0x20000000,0x20000000,\
+    0x12000000,0xBF400000,0x7F800000,0xBF400000,\
+    0X7F800000,0xA1400000,0x00000000,0x00000000,\
+    0X92400000,0x7F800000,0xBF400000,0x7F800000,\
+    0XBF400000,0x52800000,0x00000000,0x00000000
 ]
 
 # output 64bit data to MAX7219, line y(1-8)
@@ -86,7 +90,7 @@ spi = SPI(0, baudrate=10000000, bits=8, polarity=0, phase=0, mosi=Pin(3), sck=Pi
 # Initialize MAX7219 x8
 putled64(0x0c,0x0101010101010101) # Not Shutdown Mode
 putled64(0x09,0x0000000000000000) # No Decode Mode
-putled64(0x0a,0x0505050505050505) # Set Brighteness
+putled64(0x0a,0x0f0f0f0f0f0f0f0f) # Set Brighteness
 putled64(0x0b,0x0707070707070707) # Scan All LEDs
 
 vram=[0,0,0,0,0,0,0,0]
@@ -102,6 +106,8 @@ bubble_y=-1
 fish_y=0
 fish_vy=1
 pattern=0
+crab_x=0
+crab_vx=1
 
 # Main loop
 while True:
@@ -109,12 +115,14 @@ while True:
         setbmpmn( 5,0,7,8,6+pattern)         #display plants 1
         setbmpmn(23,0,7,8,6+(pattern+1)%3)   #display plants 2
         setbmpmn(42,0,7,8,6+(pattern+2)%3)   #display plants 3
+        setbmpmn(crab_x,2,12,6,9+(crab_x & 1)) #display crab
         setbmpmn(fish_x,fish_y,16,8,pattern) #display golden fish
         if bubble_y>=0:
             setp(bubble_x,bubble_y)          #display bubble
         putled()         #output VRAM data to MAX7219 LED display
         time.sleep_ms(70)
         clrbmpmn(fish_x,fish_y,16,8)         #clear golden fish
+        clrbmpmn(crab_x,2,12,6)              #clear crab
         if bubble_y>=0:
             clrp(bubble_x,bubble_y)          #clear bubble
             bubble_y=bubble_y-1              #move bubble
@@ -128,16 +136,24 @@ while True:
                 fish_vy=-1
                 bubble_x=fish_x-8            #bubble appear
                 bubble_y=7
+        if (fish_x & 7)==2:
+            crab_x=crab_x+crab_vx            #move crab
+            if crab_x==0:
+                crab_vx=1
+            elif crab_x==54:
+                crab_vx=-1
     for fish_x in range(-20,71):
         setbmpmn( 5,0,7,8,6+pattern)         #display plants 1
         setbmpmn(23,0,7,8,6+(pattern+1)%3)   #display plants 2
         setbmpmn(42,0,7,8,6+(pattern+2)%3)   #display plants 3
+        setbmpmn(crab_x,2,12,6,9+(crab_x & 1)) #display crab
         setbmpmn(fish_x,fish_y,16,8,3+pattern) #display golden fish(mirror)
         if bubble_y>=0:
             setp(bubble_x,bubble_y)          #display bubble
         putled()         #output VRAM data to MAX7219 LED display
         time.sleep_ms(70)
         clrbmpmn(fish_x,fish_y,16,8)         #clear golden fish
+        clrbmpmn(crab_x,2,12,6)              #clear crab
         if bubble_y>=0:
             clrp(bubble_x,bubble_y)          #clear bubble
             bubble_y=bubble_y-1              #move bubble
@@ -151,3 +167,9 @@ while True:
                 fish_vy=-1
                 bubble_x=fish_x+24           #bubble appear
                 bubble_y=7
+        if (fish_x & 7)==2:
+            crab_x=crab_x+crab_vx            #move crab
+            if crab_x==0:
+                crab_vx=1
+            elif crab_x==54:
+                crab_vx=-1
