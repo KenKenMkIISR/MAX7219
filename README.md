@@ -1,6 +1,7 @@
 # 8連結MAX7219マトリクスLEDのマイコン制御（64x8ドット）
 Amazon等で格安で購入できる4連結のMAX7219搭載マトリクスLEDを2個購入し、マイコンで制御してみました。  
 制御に使ったのはRaspberry Pi PicoおよびBASICコンパイラ搭載マイコンMachiKania type Mです。  
+8ビットPICマイコンPIC16F18313向けにも一部追加しました。  
 動画はこちらで公開しています。  
 https://youtu.be/BjLq4NHFMVI  
 ![](ledmatrix1.jpg)  
@@ -13,6 +14,7 @@ https://youtu.be/BjLq4NHFMVI
 ![](ledmatrix6.jpg)  
 ## 公開プログラム
 拡張子「py」はRaspberry Pi Pico用のPythonプログラム、「BAS」はMachiKania type M用のBASICプログラムです。  
+「pic16f18313」ディレクトリに8ビットPICマイコン向けファイルも追加しています。  
   
 ・max7219-string.py / SPILED6.BAS  
 　文字列を横スクロールして表示するプログラム  
@@ -50,3 +52,10 @@ SCK F6 ---------- CLK
 SCS D9 ---------- CS  
 GND ------------ GND  
 +5V ------------- VCC  
+  
+PIC16F18313  
+RA0 ------------- DIN  
+RA1 ------------- CLK  
+RA4 ------------- CS  
+VSS ------------- GND  
+VDD ------------ VCC  
