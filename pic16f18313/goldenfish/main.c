@@ -140,11 +140,11 @@ int8_t bubble_y=-1;
 int8_t crab_x=0;
 int8_t crab_dir=1;
 
-volatile uint8_t delaycounter=0;
+volatile uint16_t delaycounter=0;
 void one_ms_interrupt(void){
 	delaycounter++;
 }
-void delayms(uint8_t t){
+void delayms(uint16_t t){
 	while(delaycounter<t)
 		asm("SLEEP"); // Go to Idle mode
 	delaycounter=0;
