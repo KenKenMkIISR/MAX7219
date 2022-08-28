@@ -1,6 +1,9 @@
 REM SPI LED Matrix x8 (MAX7219 LED Driver)
 SPI 10000,16,0:REM 10MHz/16bit/Mode0
 
+REM Not Test Mode
+D=$0F00:SPIWRITE D,D,D,D,D,D,D,D
+
 REM Not Shutdown Mode
 D=$0C01:SPIWRITE D,D,D,D,D,D,D,D
 
