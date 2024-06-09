@@ -36,6 +36,15 @@ https://youtu.be/BjLq4NHFMVI
 　サンプルデータ　heike3.bmp, heik34.bmp  
 　（参考）https://twitter.com/KenKenMkIISR/status/1446828611030245383  
   
+・PIC16F18313/train/  
+　PICマイコン用鉄道アニメーション関連ファイル  
+　train.hexの書き込みで実行可能  
+　（参考）https://twitter.com/KenKenMkIISR/status/1799750078959383038  
+![](ledmatrix7.jpg)  
+・PIC16F18313/goldenfish/  
+　PICマイコン用金魚アニメーション関連ファイル  
+　goldenfish.hexの書き込みで実行可能  
+
 ## 接続方法
 LED用の電源はUSBからではなく、別電源を用意してください。  
   
