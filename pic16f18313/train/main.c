@@ -169,7 +169,49 @@ const uint8_t font_kamotsu5[]={
 	0x24,0x48
 };
 
+const uint8_t * ar_densha[]={
+	font_densha,
+	font_densha,
+	font_densha
+};
+
+const uint8_t * ar_shinkansen[]={
+	font_shinkansen1,
+	font_shinkansen2,
+	font_shinkansen2,
+	font_shinkansen2,
+	font_shinkansen3
+};
+
+const uint8_t * ar_sl[]={
+	font_sl,
+	font_tansuisha,
+	font_kyakusha,
+	font_kyakusha
+};
+
+const uint8_t * ar_kamotsu1[]={
+	font_denkikikansha,
+	font_kamotsu2,
+	font_kamotsu1,
+	font_kamotsu1,
+	font_kamotsu2,
+	font_kamotsu1
+};
+
+const uint8_t * ar_kamotsu2[]={
+	font_diesel,
+	font_kamotsu2,
+	font_kamotsu3,
+	font_kamotsu3,
+	font_kamotsu4,
+	font_kamotsu5,
+	font_kamotsu2,
+	font_kamotsu1
+};
+
 uint8_t vram[64];
+int8_t dir; // Train direction 1:left to right  -1:right to left
 
 volatile uint16_t delaycounter=0;
 void one_ms_interrupt(void){
@@ -182,46 +224,30 @@ void delayms(uint16_t t){
 }
 
 void clrvram(void){
-	uint8_t *vramp=vram;
-	for(uint8_t i=0;i<64;i++) *vramp++=0;
+	for(uint8_t *vramp=vram;vramp<vram+64;vramp++) *vramp=0;
 }
 
-void setp(uint8_t x,uint8_t y){
+void setp(uint8_t x,uint8_t y,uint8_t b){
 	if(x>=64) return;
 	if(y>=8) return;
 	uint8_t *vramp=vram+(y<<3)+(x>>3);
-	*vramp=*vramp | (1<<(7-(x & 7)));
-}
-
-void clrp(uint8_t x,uint8_t y){
-	if(x>=64) return;
-	if(y>=8) return;
-	uint8_t *vramp=vram+(y<<3)+(x>>3);
-	*vramp=*vramp & ~(1<<(7-(x & 7)));
+	uint8_t d=(1<<(7-(x & 7)));
+	if(b) *vramp=*vramp | d;
+	else *vramp=*vramp & ~d;
 }
 
 void setbmp(int8_t x,const uint8_t *bmp){
-// draw bitmap at vram x posiiton (left to right)
+// draw bitmap at vram x posiiton
 	uint8_t d;
+	int8_t x1;
 	for(uint8_t j=0;j<8;j++){
+		x1=x;
 		for(uint8_t i=0;i<16;i++){
 			if((i & 7)==0) d=*bmp++;
-			if(d & 0x80) setp((uint8_t)(x+i),j);
-			else clrp((uint8_t)(x+i),j);
+			setp(x1,j,d & 0x80);
 			d<<=1;
-		}
-	}
-}
-
-void setbmp_r(int8_t x,const uint8_t *bmp){
-// draw bitmap at vram x posiiton (right to left)
-	uint8_t d;
-	for(uint8_t j=0;j<8;j++){
-		for(uint8_t i=0;i<16;i++){
-			if((i & 7)==0) d=*bmp++;
-			if(d & 0x80) setp((uint8_t)(x-i),j);
-			else clrp((uint8_t)(x-i),j);
-			d<<=1;
+			if(dir<0) x1++;
+			else x1--;
 		}
 	}
 }
@@ -239,169 +265,50 @@ void putled(void){
 	}
 }
 
-void settrain_f(int16_t x,uint8_t n,const uint8_t *bmp){
-	// set train bitmap with x position check (forward)
+void settrain(int16_t x,uint8_t n,const uint8_t *bmp){
+	// set train bitmap with x position check
 	// x: head x position
 	// n: train number (1...)
-	if(x>=(n<<4)+63) return;
-	n--;
-	x-=n<<4;
-	if(x<0) return;
-	setbmp_r(x,bmp);
-}
-
-void settrain_b(int16_t x,uint8_t n,const uint8_t *bmp){
-	// set train bitmap with x position check (backward)
-	// x: head x position
-	// n: train number (1...)
-	if(x+(n<<4)<0) return;
-	n--;
-	x+=n<<4;
-	if(x>=64) return;
+	if(dir>0){
+		if(x>=(n<<4)+63) return;
+		n--;
+		x-=n<<4;
+		if(x<0) return;
+	}
+	else{
+		if(x+(n<<4)<0) return;
+		n--;
+		x+=n<<4;
+		if(x>=64) return;
+	}
 	setbmp(x,bmp);
 }
 
-void anim_densha_f(void){
-	// display and move densha forward (left to right)
-	for(int16_t x=0;x<64+16*3;x++){
+void anim_train(uint8_t n,const uint8_t *ar_train[],uint8_t speed){
+	// display and move train
+	// n:number of trains
+	// ar_train:train font array
+	int16_t x,i;
+	if(dir>0) x=0;
+	else x=63;
+	for(i=0;i<64+n*16;i++){
 		clrvram();
-		settrain_f(x,1,font_densha);
-		settrain_f(x,2,font_densha);
-		settrain_f(x,3,font_densha);
+		for(uint8_t j=1;j<=n;j++){
+			settrain(x,j,ar_train[j-1]);
+		}
 		putled();
-		delayms(30);
+		delayms(speed);
+		x+=dir;
 	}
 }
 
-void anim_densha_b(void){
-	// display and move densha backward (right to left)
-	for(int16_t x=63;x>-16*3;x--){
-		clrvram();
-		settrain_b(x,1,font_densha);
-		settrain_b(x,2,font_densha);
-		settrain_b(x,3,font_densha);
-		putled();
-		delayms(30);
-	}
-}
-
-void anim_shinkansen_f(void){
-	// display and move shinkansen forward (left to right)
-	for(int16_t x=0;x<64+16*5;x++){
-		clrvram();
-		settrain_f(x,1,font_shinkansen1);
-		settrain_f(x,2,font_shinkansen2);
-		settrain_f(x,3,font_shinkansen2);
-		settrain_f(x,4,font_shinkansen2);
-		settrain_f(x,5,font_shinkansen3);
-		putled();
-		delayms(15);
-	}
-}
-
-void anim_shinkansen_b(void){
-	// display and move shinkansen backward (right to left)
-	for(int16_t x=63;x>-16*5;x--){
-		clrvram();
-		settrain_b(x,1,font_shinkansen1);
-		settrain_b(x,2,font_shinkansen2);
-		settrain_b(x,3,font_shinkansen2);
-		settrain_b(x,4,font_shinkansen2);
-		settrain_b(x,5,font_shinkansen3);
-		putled();
-		delayms(15);
-	}
-}
-
-void anim_sl_f(void){
-	// display and move SL forward (left to right)
-	for(int16_t x=0;x<64+16*4;x++){
-		clrvram();
-		settrain_f(x,1,font_sl);
-		settrain_f(x,2,font_tansuisha);
-		settrain_f(x,3,font_kyakusha);
-		settrain_f(x,4,font_kyakusha);
-		putled();
-		delayms(50);
-	}
-}
-
-void anim_sl_b(void){
-	// display and move SL backward (right to left)
-	for(int16_t x=63;x>-16*4;x--){
-		clrvram();
-		settrain_b(x,1,font_sl);
-		settrain_b(x,2,font_tansuisha);
-		settrain_b(x,3,font_kyakusha);
-		settrain_b(x,4,font_kyakusha);
-		putled();
-		delayms(50);
-	}
-}
-
-void anim_kamatsu1_f(void){
-	// display and move freight train(1) forward (left to right)
-	for(int16_t x=0;x<64+16*6;x++){
-		clrvram();
-		settrain_f(x,1,font_denkikikansha);
-		settrain_f(x,2,font_kamotsu2);
-		settrain_f(x,3,font_kamotsu1);
-		settrain_f(x,4,font_kamotsu1);
-		settrain_f(x,5,font_kamotsu2);
-		settrain_f(x,6,font_kamotsu1);
-		putled();
-		delayms(30);
-	}
-}
-
-void anim_kamatsu1_b(void){
-	// display and move freight train(1) backward (right to left)
-	for(int16_t x=63;x>-16*6;x--){
-		clrvram();
-		settrain_b(x,1,font_denkikikansha);
-		settrain_b(x,2,font_kamotsu2);
-		settrain_b(x,3,font_kamotsu1);
-		settrain_b(x,4,font_kamotsu1);
-		settrain_b(x,5,font_kamotsu2);
-		settrain_b(x,6,font_kamotsu1);
-		putled();
-		delayms(30);
-	}
-}
-
-void anim_kamatsu2_f(void){
-	// display and move freight train(2) forward (left to right)
-	for(int16_t x=0;x<64+16*8;x++){
-		clrvram();
-		settrain_f(x,1,font_diesel);
-		settrain_f(x,2,font_kamotsu2);
-		settrain_f(x,3,font_kamotsu3);
-		settrain_f(x,4,font_kamotsu3);
-		settrain_f(x,5,font_kamotsu4);
-		settrain_f(x,6,font_kamotsu5);
-		settrain_f(x,7,font_kamotsu2);
-		settrain_f(x,8,font_kamotsu1);
-		putled();
-		delayms(30);
-	}
-}
-
-void anim_kamatsu2_b(void){
-	// display and move freight train(2) backward (right to left)
-	for(int16_t x=63;x>-16*8;x--){
-		clrvram();
-		settrain_b(x,1,font_diesel);
-		settrain_b(x,2,font_kamotsu2);
-		settrain_b(x,3,font_kamotsu3);
-		settrain_b(x,4,font_kamotsu3);
-		settrain_b(x,5,font_kamotsu4);
-		settrain_b(x,6,font_kamotsu5);
-		settrain_b(x,7,font_kamotsu2);
-		settrain_b(x,8,font_kamotsu1);
-		putled();
-		delayms(30);
-	}
-}
+uint16_t initword_max7219[]={
+	0x0f00, // Not Test Mode
+	0x0c01, // Not Shutdown Mode
+	0x0900, // No Decode Mode
+	0x0a05, // Set Briteness
+	0x0b07  // Scan All LEDs
+};
 
 void main(void)
 {
@@ -418,74 +325,54 @@ void main(void)
 	CPUDOZE=0x80; // Idle Enable
 
 	// init MAX7219
-	CS_L;
-	for(uint8_t i=0;i<8;i++){
-		// Not Test Mode
-		SPI1_Exchange8bit(0x0f);
-		SPI1_Exchange8bit(0x00);
+	for(uint8_t j=0;j<5;j++){
+		CS_L;
+		for(uint8_t i=0;i<8;i++){
+			SPI1_Exchange8bit((uint8_t)(initword_max7219[j]>>8));
+			SPI1_Exchange8bit((uint8_t)(initword_max7219[j]));
+		}
+		CS_H;
 	}
-	CS_H;
-	CS_L;
-	for(uint8_t i=0;i<8;i++){
-		// Not Shutdown Mode
-		SPI1_Exchange8bit(0x0c);
-		SPI1_Exchange8bit(0x01);
-	}
-	CS_H;
-	CS_L;
-	for(uint8_t i=0;i<8;i++){
-		// No Decode Mode
-		SPI1_Exchange8bit(0x09);
-		SPI1_Exchange8bit(0x00);
-	}
-	CS_H;
-	CS_L;
-	for(uint8_t i=0;i<8;i++){
-		// Set Briteness
-		SPI1_Exchange8bit(0x0a);
-		SPI1_Exchange8bit(0x05);
-	}
-	CS_H;
-	CS_L;
-	for(uint8_t i=0;i<8;i++){
-		// Scan All LEDs
-		SPI1_Exchange8bit(0x0b);
-		SPI1_Exchange8bit(0x07);
-	}
-	CS_H;
 	clrvram();
 	putled();
 
     while (1)
     {
-		anim_sl_f();
+		dir=1;
+		anim_train(sizeof ar_sl/sizeof ar_sl[0] ,ar_sl,50);
 		delayms(1000);
 
-		anim_densha_b();
+		dir=-1;
+		anim_train(sizeof ar_densha/sizeof ar_densha[0],ar_densha,30);
 		delayms(1000);
 
-		anim_shinkansen_b();
+		anim_train(sizeof ar_shinkansen/sizeof ar_shinkansen[0],ar_shinkansen,15);
 		delayms(1000);
 
-		anim_kamatsu1_f();
+		dir=1;
+		anim_train(sizeof ar_kamotsu1/sizeof ar_kamotsu1[0],ar_kamotsu1,30);
 		delayms(1000);
 
-		anim_sl_b();
+		dir=-1;
+		anim_train(sizeof ar_sl/sizeof ar_sl[0] ,ar_sl,50);
 		delayms(1000);
 
-		anim_kamatsu2_b();
+		anim_train(sizeof ar_kamotsu2/sizeof ar_kamotsu2[0],ar_kamotsu2,30);
 		delayms(1000);
 
-		anim_shinkansen_f();
+		dir=1;
+		anim_train(sizeof ar_shinkansen/sizeof ar_shinkansen[0],ar_shinkansen,15);
 		delayms(1000);
 
-		anim_kamatsu1_b();
+		dir=-1;
+		anim_train(sizeof ar_kamotsu1/sizeof ar_kamotsu1[0],ar_kamotsu1,30);
 		delayms(1000);
 
-		anim_densha_f();
+		dir=1;
+		anim_train(sizeof ar_densha/sizeof ar_densha[0],ar_densha,30);
 		delayms(1000);
 
-		anim_kamatsu2_f();
+		anim_train(sizeof ar_kamotsu2/sizeof ar_kamotsu2[0],ar_kamotsu2,30);
 		delayms(1000);
 	}
 }
