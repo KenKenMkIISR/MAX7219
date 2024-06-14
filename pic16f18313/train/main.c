@@ -18,6 +18,17 @@ const uint8_t font_densha[]={
 	// densha
 	0x18,0x30,
 	0xFF,0xFE,
+	0xA4,0x4A,
+	0xA4,0x4A,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0x28,0x28
+};
+const uint8_t font_romendensha[]={
+	// romen_densha
+	0x18,0x30,
+	0xFF,0xFE,
 	0x49,0x24,
 	0x49,0x24,
 	0xFF,0xFE,
@@ -25,7 +36,40 @@ const uint8_t font_densha[]={
 	0xFF,0xFE,
 	0x28,0x28
 };
-const uint8_t font_shinkansen1[]={
+const uint8_t font_tokkyu_h[]={
+	// tokkyu(head)
+	0x18,0x30,
+	0x3F,0xFE,
+	0x52,0x22,
+	0xD2,0x22,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0x28,0x28
+};
+const uint8_t font_tokkyu_m[]={
+	// tokkyu(middle)
+	0x18,0x30,
+	0xFF,0xFE,
+	0x91,0x12,
+	0x91,0x12,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0x28,0x28
+};
+const uint8_t font_tokkyu_t[]={
+	// tokkyu(tail)
+	0x18,0x30,
+	0xFF,0xF8,
+	0x88,0x94,
+	0x88,0x96,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0xFF,0xFE,
+	0x28,0x28
+};
+const uint8_t font_shinkansen_h[]={
 	// shinkansen(head)
 	0x02,0x00,
 	0x0F,0xFE,
@@ -36,9 +80,9 @@ const uint8_t font_shinkansen1[]={
 	0x7F,0xFE,
 	0x14,0x14
 };
-const uint8_t font_shinkansen2[]={
+const uint8_t font_shinkansen_m[]={
 	// shinkansen(middle)
-	0x00,0x00,
+	0x00,0x70,
 	0xFF,0xFE,
 	0xFF,0xFE,
 	0xAA,0xAA,
@@ -47,7 +91,7 @@ const uint8_t font_shinkansen2[]={
 	0xFF,0xFE,
 	0x28,0x28
 };
-const uint8_t font_shinkansen3[]={
+const uint8_t font_shinkansen_t[]={
 	// shinkansen(tail)
 	0x00,0x80,
 	0xFF,0xE0,
@@ -58,11 +102,33 @@ const uint8_t font_shinkansen3[]={
 	0xFF,0xFC,
 	0x50,0x50
 };
+const uint8_t font_shinkansen2_h[]={
+	// shinkansen2(head)
+	0x00,0x04,
+	0x00,0xFE,
+	0x01,0x3E,
+	0x0F,0xEA,
+	0x7F,0xFE,
+	0xFF,0xFE,
+	0x7F,0xFE,
+	0x14,0x14
+};
+const uint8_t font_shinkansen2_t[]={
+	// shinkansen2(tail)
+	0x40,0x00,
+	0xFE,0x00,
+	0xF9,0x00,
+	0xAF,0xE0,
+	0xFF,0xFC,
+	0xFF,0xFE,
+	0xFF,0xFC,
+	0x50,0x50
+};
 const uint8_t font_sl[]={
 	// steam locomotive
 	0xF0,0x00,
 	0x63,0xFE,
-	0x63,0x1A,
+	0x63,0x18,
 	0xFF,0x1C,
 	0xFF,0xFC,
 	0xFF,0xFC,
@@ -105,8 +171,8 @@ const uint8_t font_denkikikansha[]={
 const uint8_t font_diesel[]={
 	// Diesel locomotive
 	0x00,0x00,
-	0x01,0xF0,
-	0x01,0x10,
+	0x01,0xF8,
+	0x01,0x18,
 	0xFF,0xFE,
 	0xFF,0xFE,
 	0xFF,0xFE,
@@ -168,50 +234,95 @@ const uint8_t font_kamotsu5[]={
 	0xFF,0xFE,
 	0x24,0x48
 };
+const uint8_t font_kamotsu6[]={
+	// stone car3
+	0x00,0x00,
+	0x00,0x00,
+	0x00,0x00,
+	0x40,0x04,
+	0x7F,0xFC,
+	0x7F,0xFC,
+	0xFF,0xFE,
+	0x24,0x48
+};
 
-const uint8_t * ar_densha[]={
+const uint8_t * const ar_densha[]={
+	font_densha,
+	font_densha,
+	font_densha,
 	font_densha,
 	font_densha,
 	font_densha
 };
 
-const uint8_t * ar_shinkansen[]={
-	font_shinkansen1,
-	font_shinkansen2,
-	font_shinkansen2,
-	font_shinkansen2,
-	font_shinkansen3
+const uint8_t * const ar_densha2[]={
+	font_densha,
+	font_densha,
+	font_densha
 };
 
-const uint8_t * ar_sl[]={
+const uint8_t * const ar_romendensha[]={
+	font_romendensha
+};
+
+const uint8_t * const ar_tokkyu[]={
+	font_tokkyu_h,
+	font_tokkyu_m,
+	font_tokkyu_m,
+	font_tokkyu_m,
+	font_tokkyu_m,
+	font_tokkyu_t
+};
+
+const uint8_t * const ar_shinkansen1[]={
+	font_shinkansen_h,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_t
+};
+
+const uint8_t * const ar_shinkansen2[]={
+	font_shinkansen2_h,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen2_t
+};
+
+const uint8_t * const ar_shinkansen3[]={
+	font_shinkansen2_h,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen2_t,
+	font_shinkansen2_h,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen_m,
+	font_shinkansen2_t
+};
+
+const uint8_t * const ar_sl[]={
 	font_sl,
 	font_tansuisha,
 	font_kyakusha,
 	font_kyakusha
 };
 
-const uint8_t * ar_kamotsu1[]={
-	font_denkikikansha,
-	font_kamotsu2,
-	font_kamotsu1,
-	font_kamotsu1,
-	font_kamotsu2,
-	font_kamotsu1
-};
-
-const uint8_t * ar_kamotsu2[]={
-	font_diesel,
-	font_kamotsu2,
-	font_kamotsu3,
-	font_kamotsu3,
-	font_kamotsu4,
-	font_kamotsu5,
-	font_kamotsu2,
-	font_kamotsu1
-};
-
 uint8_t vram[64];
 int8_t dir; // Train direction 1:left to right  -1:right to left
+
+#define MAXTRAINS 16
+uint8_t * trains[MAXTRAINS];
 
 volatile uint16_t delaycounter=0;
 void one_ms_interrupt(void){
@@ -221,6 +332,15 @@ void delayms(uint16_t t){
 	while(delaycounter<t)
 		asm("SLEEP"); // Go to Idle mode
 	delaycounter=0;
+}
+
+uint8_t rand;
+uint8_t random()
+{
+	// r=r*5+1;
+	rand=rand+rand+rand+rand+rand;
+	rand++;
+	return rand;
 }
 
 void clrvram(void){
@@ -310,6 +430,82 @@ uint16_t initword_max7219[]={
 	0x0b07  // Scan All LEDs
 };
 
+void anim_sl(){
+	anim_train(sizeof ar_sl/sizeof ar_sl[0] ,ar_sl,50);
+}
+
+void anim_densha(){
+	if(random() & 1)
+		anim_train(sizeof ar_densha/sizeof ar_densha[0],ar_densha,25);
+	else
+		anim_train(sizeof ar_densha2/sizeof ar_densha2[0],ar_densha2,30);
+}
+
+void anim_romendensha(){
+	anim_train(sizeof ar_romendensha/sizeof ar_romendensha[0] ,ar_romendensha,40);
+}
+
+void anim_tokkyu(){
+	anim_train(sizeof ar_tokkyu/sizeof ar_tokkyu[0],ar_tokkyu,20);
+}
+
+void anim_shinkansen(){
+	uint8_t r=random();
+	if(r<100)
+		anim_train(sizeof ar_shinkansen1/sizeof ar_shinkansen1[0],ar_shinkansen1,15);
+	else if(r<200)
+		anim_train(sizeof ar_shinkansen2/sizeof ar_shinkansen2[0],ar_shinkansen2,15);
+	else
+		anim_train(sizeof ar_shinkansen3/sizeof ar_shinkansen3[0],ar_shinkansen3,15);
+}
+
+void anim_kamotsu(){
+	uint8_t n,len;
+	if(random() & 0x80) trains[0]=font_denkikikansha;
+	else trains[0]=font_diesel;
+	len=random() & (MAXTRAINS-1);
+	len++;
+	if(len<4) len+=7;
+	for(n=1;n<len;n++){
+		switch(random() & 7){
+			case 0:
+				trains[n]=font_kamotsu3;
+				break;
+			case 1:
+				trains[n]=font_kamotsu4;
+				break;
+			case 2:
+				trains[n]=font_kamotsu5;
+				break;
+			case 3:
+				trains[n]=font_kamotsu6;
+				break;
+			case 4:
+			case 5:
+				trains[n]=font_kamotsu1;
+				break;
+			default:
+				trains[n]=font_kamotsu2;
+				break;
+		}
+	}
+	anim_train(len,trains,30);
+}
+
+void anim_kamotsu2(){
+	uint8_t n,r;
+	if(random() & 1) trains[0]=font_denkikikansha;
+	else trains[0]=font_diesel;
+	for(n=1;n<MAXTRAINS;n++){
+		r=random();
+		if(r<180) trains[n]=font_kamotsu3;
+		else if(r<205) trains[n]=font_kamotsu4;
+		else if(r<230) trains[n]=font_kamotsu5;
+		else trains[n]=font_kamotsu6;
+	}
+	anim_train(MAXTRAINS,trains,30);
+}
+
 void main(void)
 {
     // initialize the device
@@ -335,44 +531,24 @@ void main(void)
 	}
 	clrvram();
 	putled();
+	rand=ADRESL;
 
     while (1)
     {
-		dir=1;
-		anim_train(sizeof ar_sl/sizeof ar_sl[0] ,ar_sl,50);
-		delayms(1000);
-
-		dir=-1;
-		anim_train(sizeof ar_densha/sizeof ar_densha[0],ar_densha,30);
-		delayms(1000);
-
-		anim_train(sizeof ar_shinkansen/sizeof ar_shinkansen[0],ar_shinkansen,15);
-		delayms(1000);
-
-		dir=1;
-		anim_train(sizeof ar_kamotsu1/sizeof ar_kamotsu1[0],ar_kamotsu1,30);
-		delayms(1000);
-
-		dir=-1;
-		anim_train(sizeof ar_sl/sizeof ar_sl[0] ,ar_sl,50);
-		delayms(1000);
-
-		anim_train(sizeof ar_kamotsu2/sizeof ar_kamotsu2[0],ar_kamotsu2,30);
-		delayms(1000);
-
-		dir=1;
-		anim_train(sizeof ar_shinkansen/sizeof ar_shinkansen[0],ar_shinkansen,15);
-		delayms(1000);
-
-		dir=-1;
-		anim_train(sizeof ar_kamotsu1/sizeof ar_kamotsu1[0],ar_kamotsu1,30);
-		delayms(1000);
-
-		dir=1;
-		anim_train(sizeof ar_densha/sizeof ar_densha[0],ar_densha,30);
-		delayms(1000);
-
-		anim_train(sizeof ar_kamotsu2/sizeof ar_kamotsu2[0],ar_kamotsu2,30);
-		delayms(1000);
+		uint8_t r=random();
+		if(r & 1) dir=1;
+		else dir=-1;
+		if(r<60) anim_densha();
+		else if(r<70) anim_romendensha();
+		else if(r<120) anim_tokkyu();
+		else if(r<180) anim_shinkansen();
+		else if(r<210) anim_sl();
+		else if(r<240) anim_kamotsu();
+		else anim_kamotsu2();
+		delayms(1000+((uint16_t)random()<<3));
+		while(ADRESL & 3){
+			random();
+			delayms(1);
+		}
 	}
 }

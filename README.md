@@ -39,7 +39,7 @@ https://youtu.be/BjLq4NHFMVI
 ・PIC16F18313/train/  
 　PICマイコン用鉄道アニメーション関連ファイル  
 　train.hexの書き込みで実行可能  
-　（参考）https://twitter.com/KenKenMkIISR/status/1799750078959383038  
+　（参考）https://www.youtube.com/watch?v=PWXJrVMHTL0  
 ![](ledmatrix7.jpg)  
 ・PIC16F18313/goldenfish/  
 　PICマイコン用金魚アニメーション関連ファイル  
